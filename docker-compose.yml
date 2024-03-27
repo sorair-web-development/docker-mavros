@@ -1,0 +1,31 @@
+version: '3.3'
+
+services:
+  ardupilot-sitl:
+    image: adebayost/ardupilot-sitl
+    networks:
+      - ardupilot-net
+    environment:
+      VEHICLE: "APMrover2"
+      LAT: "39.9656"
+      LON: "-75.1810"
+      ALT: "276"
+      DIR: "180"
+      SPEEDUP: "2"
+
+  mavros:
+    image: adebayost/mavros
+    networks:
+      - ardupilot-net
+    environment:
+      # Assuming SITL runs on the same network and is reachable at ardupilot-sitl
+      FCUURL: "tcp://ardupilot-sitl:5760"
+   
+
+networks:
+  ardupilot-net:
+    driver: bridge
+
+# docker run --rm -p 5760:5760  --name ardupilot-sitl  -e VEHICLE="APMrover2" -e LAT="39.9656"   -e LON="-75.1810"   -e ALT="276"   -e DIR="180"   -e SPEEDUP="2" adebayost/ardupilot-sitl
+
+# docker run -it --rm --network="host" --env FCUURL="tcp://localhost:5760" radarku/mavros

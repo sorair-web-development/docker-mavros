@@ -1,5 +1,5 @@
 FROM ros:kinetic
-LABEL maintainer Kyle Usbeck
+LABEL maintainer adebayo@sorair.co.uk
 
 # Trick to get apt-get to not prompt for timezone in tzdata
 ENV DEBIAN_FRONTEND=noninteractive
@@ -28,3 +28,17 @@ ENV FCUURL=tcp://localhost:5760
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT /entrypoint.sh ${FCUURL}
+
+
+# docker buildx build --platform linux/arm64,linux/amd64 -t adebayost/mavros:latest --push .
+
+# docker run -it --rm -p 5761:5760 \
+#    --env VEHICLE=APMrover2 \
+#    --env LAT=39.9656 \
+#    --env LON=-75.1810 \
+#    --env ALT=276 \
+#    --env DIR=180 \
+#    --env SPEEDUP=2 \
+#    adebayost/ardupilot-sitl
+
+# docker run -it --rm --env FCUURL="tcp://localhost:5760" radarku/mavros
